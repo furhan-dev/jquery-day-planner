@@ -2,15 +2,21 @@ const scheduleContainerEl = $('.container');
 var rightNow;
 var scheduleTableEl;
 
+/**
+ * Init function called when script is loaded
+ */
 function init() {
     // set current date/time
     rightNow = moment();
     $('#currentDay').text(rightNow.format('dddd, MMMM Do'));
     // build initial work day schedule
-    createSchedule();
+    renderSchedule();
 }
 
-function createSchedule() {
+/**
+ * Renders schedule and color time blocks based on time of day
+ */
+function renderSchedule() {
     // set the number of hours in a work day (8 + 1 hour for lunch)
     const workHours = 9;
     // create a variable to keep track of current hour in for loop
@@ -42,8 +48,8 @@ function createSchedule() {
         if (desc != null) {
             descEl.text(desc);
         }
-
         descTdEl.append(descEl);
+
         // create save button td
         let saveTdEl = $('<td>').addClass('col-2 col-md-1 p-0');
         let saveButtonEl = $('<button>').addClass('saveBtn').text('Save');
@@ -69,6 +75,10 @@ function createSchedule() {
     scheduleContainerEl.append(scheduleTableEl);
 }
 
+/**
+ * Handler for save buttons 
+ * @param {object} event click event
+ */
 function handleSaveButton(event) {
     event.preventDefault();
     const buttonClicked = $(event.target);
@@ -81,4 +91,5 @@ function handleSaveButton(event) {
 
 }
 
+// call init function on load
 init();
