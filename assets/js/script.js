@@ -1,54 +1,51 @@
-const scheduleContainer = $('.container');
+const scheduleContainerEl = $('.container');
+var scheduleTableEl;
 
 function init() {
     // build initial work day schedule
     createSchedule();
-    // get current hour and update previous and future hours
-    // add save click event listener
-    //// localStorage.set('09:00 am') = eventDesc
 }
 
 function createSchedule() {
-    /*
-    <div class="time-block row">
-        <p class="hour"><label for="block-desc">9 AM</label></p>
-        <textarea id="block-desc" name="block-desc"></textarea>
-        <button class="saveBtn"></button>
-    </div> 
-    */
 
+    // set the number of hours in a work day (8 + 1 hour for lunch)
     const workHours = 9;
+    // create a variable to keep track of current hour in for loop
     let currentHour = moment("09:00", "hh:mm");
-    // let currentHour = moment("09:00", "hh:mm").format("hh:mm a");
-    console.log("start time: " + currentHour);
+    // create a table to append each hour row into 
+    scheduleTableEl = $('<table>').addClass('table');
+
+    // loop to create a row for each work hour
     for (let i = 0; i < workHours; i++) {
+        // create a row
+        let rowEl = $('<tr>').addClass('row');
+        // create hour td
+        let hourTdEl = $('<td>').addClass('hour col-2 col-md-1 pe-1').text(currentHour.format('hA'));
+        // create desc container td
+        let descTdEl = $('<td>').addClass('col-8 col-md-10 p-0');
+        // create desc text area element
+        let descEL = $('<textarea>').addClass('description');
+        descTdEl.append(descEL);
+        // create save button td
+        let saveTdEl = $('<td>').addClass('col-2 col-md-1 p-0');
+        saveButtonEl = $('<button>').addClass('saveBtn').text('Save');
+        saveTdEl.append(saveButtonEl);
 
-        // create time block div for each hour
-        const timeBlockRow = $('<div>'); 
-        timeBlockRow.addClass('time-block', 'row');
-
-        // create hour label
-        const hourLabel = $('<label>');
-        hourLabel.attr('for', 'block-desc');
-        hourLabel.addClass('hour');
-        hourLabel.text(currentHour.format("hh:mm a"));
-        // create text area
-        const hourTextArea = $('<textarea>');
-        hourTextArea.attr('id', 'block-desc');
-        hourTextArea.attr('name', 'block-desc');
-        // create save button
-        const hourSaveButton = $('<button>');
-        hourSaveButton.addClass('saveBtn');
-
-        // append all elements
-        timeBlockRow.append(hourLabel);
-        timeBlockRow.append(hourTextArea);
-        timeBlockRow.append(hourSaveButton);
-        scheduleContainer.append(timeBlockRow);
+        // append all td elements to row
+        rowEl.append(
+            hourTdEl,
+            descTdEl,
+            saveTdEl);
+        
+        // append row to table
+        scheduleTableEl.append(rowEl);
 
         // increment hour
         currentHour.add(1, "hours");
     }
+
+    // append table to containe 
+    scheduleContainerEl.append(scheduleTableEl);
 }
 
 init();
