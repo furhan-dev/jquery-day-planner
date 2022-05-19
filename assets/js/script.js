@@ -27,7 +27,6 @@ function init() {
     // add event handlers
     scheduleTableEl.on('click', '.description', handleScheduleClick);
     $('body').on('click', '.save-event', handleSaveEvent)
-    $('body').on('click', '.cancel-event', handleCancelEvent)
     $('body').on('click', '.delete-event', handleDeleteEvent)
 }
 
@@ -106,25 +105,24 @@ function renderSchedule() {
 // single click to focus event
 
 function handleSaveEvent(event) {
-    event.preventDefault();
     const textAreaEl = $(this).parent().prev();
     const dataTime = textAreaEl.attr('data-time');
     localStorage.setItem(dataTime, textAreaEl.val());
     const scheduleButtonEl = $("button[data-time='" + dataTime + "']");
     const scheduleButtonDivEl = scheduleButtonEl.children()[0];
     scheduleButtonDivEl.textContent = textAreaEl.val();
-    $("button[data-bs-toggle='popover']").not(this).popover('hide');
+    $("button[data-bs-toggle='popover']").popover('hide');
 }
 
 function handleDeleteEvent(event) {
-    event.preventDefault();
     const textAreaEl = $(this).parent().prev();
     const dataTime = textAreaEl.attr('data-time');
-    localStorage.setItem(dataTime, textAreaEl.val());
+    textAreaEl.val("");
+    localStorage.removeItem(dataTime);
     const scheduleButtonEl = $("button[data-time='" + dataTime + "']");
     const scheduleButtonDivEl = scheduleButtonEl.children()[0];
-    scheduleButtonDivEl.textContent = textAreaEl.val();
-    $("button[data-bs-toggle='popover']").not(this).popover('hide');
+    scheduleButtonDivEl.remove();
+    $("button[data-bs-toggle='popover']").popover('hide');
 }
 
 /**
@@ -150,11 +148,9 @@ function createPopoverContent(currentHour, eventDesc) {
             .attr('data-time', currentHour.format('YYYY-MM-DD HH'));
     const buttonContainerEl = $('<div>').addClass('d-flex justify-content-between my-1');
     const saveBtnEl = $('<button>').addClass('btn btn-primary save-event').text('Save');
-    const cancelBtnEl = $('<button>').addClass('btn btn-danger me-1 cancel-event').text('Cancel');
+    const cancelBtnEl = $('<button>').addClass('btn btn-danger me-1 delete-event').text('Delete');
     if (eventDesc) {
         textAreaEL.text(eventDesc);
-        cancelBtnEl.replaceClass('cancel-event', 'delete-event');
-        cancelBtnEl.text('Delete')
     }
     buttonContainerEl.append(cancelBtnEl, saveBtnEl);
     const contentString = $('<div>').addClass("popover-content d-flex flex-column").append(textAreaEL, buttonContainerEl).prop('outerHTML');
