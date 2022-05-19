@@ -92,17 +92,11 @@ function renderSchedule() {
         currentHour.add(1, "hours");
     }
 
-    // append table to containe 
-    scheduleContainerEl.append(scheduleTableEl);
+    // append table to container
+    scheduleContainerEl.html(scheduleTableEl);
 }
 
-// need to create popover on the div that i create inside the hour button
-// need to check if div already exists, if so edit, otherwise create new
-// update div popover title based on if event already exists
-
 // prevent popover dismissal
-// double click to create new event or edit existing one
-// single click to focus event
 
 function handleSaveEvent(event) {
     const textAreaEl = $(this).parent().prev();
@@ -112,6 +106,7 @@ function handleSaveEvent(event) {
     const scheduleButtonDivEl = scheduleButtonEl.children()[0];
     scheduleButtonDivEl.textContent = textAreaEl.val();
     $("button[data-bs-toggle='popover']").popover('hide');
+    init();
 }
 
 function handleDeleteEvent(event) {
@@ -123,6 +118,7 @@ function handleDeleteEvent(event) {
     const scheduleButtonDivEl = scheduleButtonEl.children()[0];
     scheduleButtonDivEl.remove();
     $("button[data-bs-toggle='popover']").popover('hide');
+    init();
 }
 
 /**
