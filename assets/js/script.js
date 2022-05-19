@@ -8,7 +8,7 @@ var scheduleTableEl;
 function init() {
     // set current date/time
     rightNow = moment();
-    $('#currentDay').text(rightNow.format('dddd, MMMM Do'));
+    $('#currentDay').text(rightNow.format('dddd, MMMM Do, YYYY'));
     // build initial work day schedule
     renderSchedule();
     // initialize all popovers

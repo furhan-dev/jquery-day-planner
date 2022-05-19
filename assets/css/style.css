@@ -23,10 +23,10 @@ textarea {
 
 .jumbotron {
   text-align: center;
-  background-color: transparent;
+  background-color: #06afd53e;
   color: black;
-  border-radius: 0;
-  border-bottom: 10px solid black;
+  border-radius: 2%;
+  margin-bottom: 2rem;
 }
 
 .description {
