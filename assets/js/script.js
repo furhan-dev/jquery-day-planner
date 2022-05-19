@@ -19,7 +19,6 @@ function init() {
                 container: 'body',
                 html: true,
                 sanitize: false,
-                // content: $('#popover-content')[0].innerHTML
 
             })
         return popover;
@@ -28,8 +27,8 @@ function init() {
     // add event handlers
     scheduleTableEl.on('click', '.description', handleScheduleClick);
     $('body').on('click', '.save-event', handleSaveEvent)
-
-    console.log("popover length " + $('.popover-content').length)
+    $('body').on('click', '.cancel-event', handleCancelEvent)
+    $('body').on('click', '.delete-event', handleDeleteEvent)
 }
 
 /**
@@ -109,9 +108,23 @@ function renderSchedule() {
 function handleSaveEvent(event) {
     event.preventDefault();
     const textAreaEl = $(this).parent().prev();
-    localStorage.setItem(textAreaEl.attr('data-time'), textAreaEl.val());
-    // reset text area in popover to be empty
-    textAreaEl.val('');
+    const dataTime = textAreaEl.attr('data-time');
+    localStorage.setItem(dataTime, textAreaEl.val());
+    const scheduleButtonEl = $("button[data-time='" + dataTime + "']");
+    const scheduleButtonDivEl = scheduleButtonEl.children()[0];
+    scheduleButtonDivEl.textContent = textAreaEl.val();
+    $("button[data-bs-toggle='popover']").not(this).popover('hide');
+}
+
+function handleDeleteEvent(event) {
+    event.preventDefault();
+    const textAreaEl = $(this).parent().prev();
+    const dataTime = textAreaEl.attr('data-time');
+    localStorage.setItem(dataTime, textAreaEl.val());
+    const scheduleButtonEl = $("button[data-time='" + dataTime + "']");
+    const scheduleButtonDivEl = scheduleButtonEl.children()[0];
+    scheduleButtonDivEl.textContent = textAreaEl.val();
+    $("button[data-bs-toggle='popover']").not(this).popover('hide');
 }
 
 /**
@@ -128,18 +141,6 @@ function handleScheduleClick(event) {
     if ($(this).children().length === 0) {
         $(this).append(eventDivEl);
     }
-    
-    // const buttonClicked = $(event.target);
-
-    // get description by first getting parent td, it's prev sibling, and finding child description
-    // const descEl = $(this).parent().prev().children('.description');
-
-    // write the description to local storage for that hour
-    // get parent element
-    // console.log(descEl.attr('data-time'));
-
-    // localStorage.setItem($(this).attr('data-time'), JSON.stringify(eventDivEl[0].outerHTML));
-
 }
 
 function createPopoverContent(currentHour, eventDesc) {
@@ -152,13 +153,11 @@ function createPopoverContent(currentHour, eventDesc) {
     const cancelBtnEl = $('<button>').addClass('btn btn-danger me-1 cancel-event').text('Cancel');
     if (eventDesc) {
         textAreaEL.text(eventDesc);
+        cancelBtnEl.replaceClass('cancel-event', 'delete-event');
         cancelBtnEl.text('Delete')
     }
     buttonContainerEl.append(cancelBtnEl, saveBtnEl);
-    buttonContainerEl.on('click', '.save-event', handleSaveEvent);
-//    return $('<div>').addClass("popover-content d-flex flex-column").append(textAreaEL, buttonContainerEl).prop('outerHTML');
     const contentString = $('<div>').addClass("popover-content d-flex flex-column").append(textAreaEL, buttonContainerEl).prop('outerHTML');
-//    console.log("content string: " + contentString);
     return contentString;
 }
 
