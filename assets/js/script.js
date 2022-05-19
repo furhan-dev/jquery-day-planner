@@ -43,7 +43,7 @@ function renderSchedule() {
     // loop over all work hours and add row
     for (let i = 0; i < workHours; i++) {
         // create a row
-        const rowEl = $('<tr>').addClass('row');
+        const rowEl = $('<tr>').addClass('row m-0');
         // create hour td
         const hourTdEl = $('<td>').addClass('hour col-2 col-md-1').text(currentHour.format('h A'));
 
